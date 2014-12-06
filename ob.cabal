@@ -7,7 +7,7 @@ cabal-version:       >=1.10
 
 executable ob
   default-language:    Haskell2010
-  ghc-options:         -Wall -O2
+  ghc-options:         -Wall -O2 -threaded
   hs-source-dirs:      src
   main-is:             Main.hs
   build-depends:
@@ -20,9 +20,11 @@ executable ob
     scotty,
     wai-middleware-static,
     websockets,
-    uuid, unix
+    process,
+    uuid, unix,
+    network-uri
 
   default-extensions:
     OverloadedStrings,
-    LambdaCase, NamedFieldPuns,
+    LambdaCase, NamedFieldPuns, RecordWildCards,
     TemplateHaskell
