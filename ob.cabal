@@ -13,6 +13,7 @@ executable ob
   build-depends:
     base >=4.7 && <4.8,
     text,
+    containers,
     transformers,
     configurator,
     aeson,
