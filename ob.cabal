@@ -12,11 +12,16 @@ executable ob
   main-is:             Main.hs
   build-depends:
     base >=4.7 && <4.8,
+    text,
     transformers,
     configurator,
     aeson,
     scotty,
-    wai-middleware-static
+    wai-middleware-static,
+    websockets,
+    uuid, unix
 
   default-extensions:
-    OverloadedStrings, LambdaCase
+    OverloadedStrings,
+    LambdaCase, NamedFieldPuns,
+    TemplateHaskell
