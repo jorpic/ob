@@ -3,7 +3,7 @@ module.exports = (grunt) ->
     pkg: grunt.file.readJSON('package.json')
     watch:
       scripts:
-        files: 'coffee/*.coffee'
+        files: 'static/coffee/*.coffee'
         tasks: ['coffee']
     coffee:
       compile:
@@ -11,7 +11,7 @@ module.exports = (grunt) ->
           bare:  true
           sourceMap: true
         files:
-          'static/main.js': ['coffee/*.coffee']
+          'static/js/main.js': ['static/coffee/*.coffee']
 
   grunt.loadNpmTasks('grunt-contrib-watch')
   grunt.loadNpmTasks('grunt-contrib-coffee')
