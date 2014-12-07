@@ -26,5 +26,4 @@ executable ob
 
   default-extensions:
     OverloadedStrings,
-    LambdaCase, NamedFieldPuns, RecordWildCards,
-    TemplateHaskell
+    LambdaCase, NamedFieldPuns, RecordWildCards
