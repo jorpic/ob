@@ -11,6 +11,7 @@ import qualified Data.Configurator as Config
 import Common
 import HTTP
 import WS
+import Graphite
 
 
 
@@ -25,5 +26,6 @@ main = getArgs >>= \case
         <*> Config.require cfg "tank.data_dir"
     ss   <- emptyServerState
     void $ forkIO $ wsServer conf ss
+    void $ forkIO $ graphiteServer conf ss
     httpServer conf ss
   _ -> error "Usage: ob <config>"

@@ -48,6 +48,7 @@ httpServer conf@(Config{httpPort, wsPort}) ss
               finally (runTank conf uuid uri) $ do
                 writeChan ch EOF -- FIXME: dupChan is required here
                 finishJob uuid ss
+                -- save results
 
           json $ Aeson.object
             ["job" .= UUID.toString uuid

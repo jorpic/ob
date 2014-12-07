@@ -23,13 +23,21 @@ data ServerState = ServerState
 
 data Msg = EOF | Msg Text
 
+
 emptyServerState :: IO ServerState
 emptyServerState = ServerState <$> newIORef Map.empty
+
 
 addJob :: UUID -> ServerState -> IO (Chan Msg)
 addJob uuid ServerState{..} = do
   ch <- newChan
   atomicModifyIORef' liveJobs (\lj -> (Map.insert uuid ch lj, ch))
+
+
+getJob :: UUID -> ServerState -> IO (Maybe (Chan Msg))
+getJob uuid ServerState{liveJobs}
+  = Map.lookup uuid <$> readIORef liveJobs
+
 
 finishJob :: UUID -> ServerState -> IO ()
 finishJob uuid ServerState{..}

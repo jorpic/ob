@@ -22,7 +22,8 @@ executable ob
     websockets,
     process,
     uuid, unix,
-    network-uri
+    network-uri,
+    network
 
   default-extensions:
     OverloadedStrings,
