@@ -26,7 +26,9 @@ graphiteServer Config{graphitePort} ss
             False -> parseMsg <$> hGetLine h >>= \case
               Nothing -> loop -- Skip malformed messages
               Just (uuid, path, val, tm) -> do
-                putStrLn $ show (uuid, path, val, tm)
+                getJob uuid ss >>= \case
+                  Nothing -> return ()
+                  Just ch -> writeChan ch $ mkMsg path tm val
                 loop
       forkIO loop
 

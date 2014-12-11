@@ -31,6 +31,7 @@ runTank Config{graphitePort, tankDir} uuid URI{..} = do
         , "[phantom]"
         , "rps_schedule=const(10, 20)"
         , "address=" ++ uriRegName auth ++ uriPort auth
+        -- FIXME: check if empty
         , "uris=" ++ uriPath ++ uriQuery
         ]
   writeFile (jobDir ++ "/load.ini") ini

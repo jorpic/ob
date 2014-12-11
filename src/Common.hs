@@ -4,9 +4,11 @@ module Common where
 import Control.Applicative
 import Control.Concurrent.Chan
 import Data.Text (Text)
+import Data.ByteString.Lazy (ByteString)
 import Data.IORef
 import Data.Map (Map)
 import qualified Data.Map as Map
+import Data.Aeson as Aeson
 import Data.UUID
 
 
@@ -21,7 +23,17 @@ data ServerState = ServerState
   { liveJobs :: IORef (Map UUID (Chan Msg))
   }
 
-data Msg = EOF | Msg Text
+
+data Msg = EOF | Msg ByteString
+
+mkMsg :: Text -> Int -> Double -> Msg
+mkMsg key tm val
+  = Msg
+  $ Aeson.encode $ object
+    [ "key" .= key
+    , "time" .= tm
+    , "value" .= val
+    ]
 
 
 emptyServerState :: IO ServerState
