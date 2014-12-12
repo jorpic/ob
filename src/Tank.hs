@@ -23,6 +23,7 @@ runTank
     let Just auth = uriAuthority
     let ini = unlines
           [ "[tank]"
+          , "plugin_rcheck="
           , "plugin_web="
           , "plugin_console="
           , "plugin_loadosophia="
