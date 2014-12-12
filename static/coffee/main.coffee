@@ -29,23 +29,28 @@ updateGraph = (d) ->
   data.push
     time: d.time - baseTime
     value: d.value
-  if data.length > 1
-    do graph_redraw
+  do graph_redraw
 
 
 orangeClick = (form) ->
   # FIXME: check URL & normalize it
+  spin = spinner
+    width: 350
+    height: 350
+    container: '#spinner'
+
   req = JSON.stringify(url: form.elements[0].value)
   d3.json('/bang').post req, (err, rsp) ->
     if not rsp.error
       wsURL = "ws://#{location.hostname}:#{rsp.ws_port}/#{rsp.job}"
       ws = new WebSocket wsURL
       ws.onopen = ->
+      ws.onclose = ->
       ws.onmessage = (m) ->
         d = JSON.parse m.data
         if d.config # server wants to share some config options
           getConfig d.config
         if d.key == 'overall.RPS'
+          spin.stop()
           updateGraph d
-      ws.onclose = ->
   false

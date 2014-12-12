@@ -4,11 +4,17 @@
 <style>
 html, body {
   margin: 0;
+  color: #444;
 }
 .container {
   text-align: center;
   padding-top: 4em;
 }
+
+#spinner {
+  display: none;
+}
+
 form input {
   font-size: 1em;
   height: 2em;
@@ -32,8 +38,15 @@ form button {
       </input>
       <button type="submit">Big orange button</button>
     </form>
+
+    <div id="spinner">
+      <div></div>
+      <span>Prepare for the worst...</span>
+    </div>
+
     <div id="graph"></div>
   </div>
+
   <link href="http://metricsgraphicsjs.org/css/metricsgraphics.css" rel="stylesheet" type="text/css">
   <script src="http://d3js.org/d3.v3.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>

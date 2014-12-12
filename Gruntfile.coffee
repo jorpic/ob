@@ -11,7 +11,10 @@ module.exports = (grunt) ->
           bare:  true
           sourceMap: true
         files:
-          'static/js/main.js': ['static/coffee/*.coffee']
+          'static/js/main.js':
+            ['static/coffee/spinner.coffee'
+            ,'static/coffee/main.coffee'
+            ]
 
   grunt.loadNpmTasks('grunt-contrib-watch')
   grunt.loadNpmTasks('grunt-contrib-coffee')
