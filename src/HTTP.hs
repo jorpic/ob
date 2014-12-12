@@ -37,16 +37,16 @@ httpServer conf@(Config{httpPort, wsPort}) ss
       file "static/index.html"
 
     post "/bang" $ do
-      BangQuery{url} <- jsonData -- TODO: check url => ssl, port, url
+      BangQuery{url} <- jsonData -- TODO: check url => ssl, port, path
       case parseAbsoluteURI url of
         Nothing  -> json $ Aeson.object ["error" .= ("invalid url" :: Text)]
         Just uri -> do
           uuid <- liftIO UUID.nextRandom
-          liftIO $ do -- store job id in the server state
+          liftIO $ do
             ch <- addJob uuid ss
             void $ forkIO $ do
-              finally (runTank conf uuid uri) $ do
-                writeChan ch EOF -- FIXME: dupChan is required here
+              finally (runTank conf ss uuid uri) $ do
+                dupChan ch >>= \ch' -> writeChan ch' EOF
                 finishJob uuid ss
                 -- save results
 

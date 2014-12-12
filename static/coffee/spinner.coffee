@@ -37,7 +37,7 @@ spinner = (config) ->
   r = Math.min(config.width, config.height) / 2
   duration = 1500
 
-  svg = d3.select("#{config.container} div")
+  svg = d3.select(config.container)
     .append('svg')
       .attr('width', config.width)
       .attr('height', config.height)

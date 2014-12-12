@@ -28,14 +28,20 @@ data ServerState = ServerState
 
 data Msg = EOF | Msg ByteString
 
-mkMsg :: Text -> Int -> Double -> Msg
-mkMsg key tm val
+mkDataMsg :: Text -> Int -> Double -> Msg
+mkDataMsg key tm val
   = Msg
   $ Aeson.encode $ object
     [ "key" .= key
     , "time" .= tm
     , "value" .= val
     ]
+
+mkErrMsg :: Maybe String -> Msg
+mkErrMsg
+  = Msg . Aeson.encode . object
+  . maybe ["stop" .= ()]
+    (\err -> ["stop" .= object ["error" .= err]])
 
 
 emptyServerState :: IO ServerState

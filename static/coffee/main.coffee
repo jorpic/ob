@@ -34,6 +34,7 @@ updateGraph = (d) ->
 
 orangeClick = (form) ->
   # FIXME: check URL & normalize it
+  d3.select('#msg').text('Prepare for the worst...')
   spin = spinner
     width: 350
     height: 350
@@ -44,13 +45,17 @@ orangeClick = (form) ->
     if not rsp.error
       wsURL = "ws://#{location.hostname}:#{rsp.ws_port}/#{rsp.job}"
       ws = new WebSocket wsURL
-      ws.onopen = ->
-      ws.onclose = ->
       ws.onmessage = (m) ->
         d = JSON.parse m.data
         if d.config # server wants to share some config options
           getConfig d.config
+
+        if d.stop
+          d3.select('#msg').text(
+            if d.stop.error then d.stop.error else 'Finished successfully')
+
         if d.key == 'overall.RPS'
+          d3.select('#msg').text('Test in progress...')
           spin.stop()
           updateGraph d
   false

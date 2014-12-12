@@ -28,7 +28,7 @@ graphiteServer Config{graphitePort} ss
               Just (uuid, path, val, tm) -> do
                 getJob uuid ss >>= \case
                   Nothing -> return ()
-                  Just ch -> writeChan ch $ mkMsg path tm val
+                  Just ch -> writeChan ch $ mkDataMsg path tm val
                 loop
       forkIO loop
 
