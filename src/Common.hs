@@ -17,6 +17,8 @@ data Config = Config
   , wsPort       :: Int
   , graphitePort :: Int
   , tankDir      :: String
+  , maxRps       :: Int
+  , testDur      :: Int
   }
 
 data ServerState = ServerState

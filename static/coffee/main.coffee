@@ -1,13 +1,16 @@
 
 data = []
+duration = 0
+maxRps = 0
+baseTime = 0
 
 graph_redraw = ->
+  scale = [{time:0, value:0},{time:duration, value:maxRps}]
   data_graphic
-    title: 'quantiles.100'
-    description: 'test results'
-    data: data
-    width: 400
-    height: 250
+    data: [data, scale]
+    area: false
+    width: 600
+    height: 350
     target: '#graph'
     x_accessor: 'time'
     y_accessor: 'value'
@@ -15,7 +18,23 @@ graph_redraw = ->
     transition_on_update: false
 
 
+getConfig = (c) ->
+  duration = c.duration
+  maxRps = c.maxRps
+
+
+updateGraph = (d) ->
+  if not baseTime
+    baseTime = d.time
+  data.push
+    time: d.time - baseTime
+    value: d.value
+  if data.length > 1
+    do graph_redraw
+
+
 orangeClick = (form) ->
+  # FIXME: check URL & normalize it
   req = JSON.stringify(url: form.elements[0].value)
   d3.json('/bang').post req, (err, rsp) ->
     if not rsp.error
@@ -24,12 +43,9 @@ orangeClick = (form) ->
       ws.onopen = ->
       ws.onmessage = (m) ->
         d = JSON.parse m.data
-        if d.key == 'cumulative.quantiles.100_0'
-          data.push
-            time: new Date(d.time)
-            value: d.value
-          if data.length > 1
-            do graph_redraw
-            console.debug d
+        if d.config # server wants to share some config options
+          getConfig d.config
+        if d.key == 'overall.RPS'
+          updateGraph d
       ws.onclose = ->
   false

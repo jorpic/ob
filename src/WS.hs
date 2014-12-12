@@ -4,7 +4,7 @@ module WS (wsServer) where
 import Control.Concurrent.Chan
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
-
+import Data.Aeson as Aeson
 import Data.UUID as UUID
 import qualified Network.WebSockets as WS
 
@@ -12,7 +12,7 @@ import Common
 
 
 wsServer :: Config -> ServerState -> IO ()
-wsServer Config{wsPort} ss
+wsServer Config{wsPort, testDur, maxRps} ss
   = WS.runServer "0.0.0.0" wsPort $ \req -> do
     let uuid = UUID.fromString
           . T.unpack . T.tail -- drop leading slash
@@ -25,6 +25,13 @@ wsServer Config{wsPort} ss
         Nothing -> WS.rejectRequest req "Job is finished or never existed"
         Just jobCh -> do
           conn <- WS.acceptRequest req
+          let conf = Aeson.encode $ object
+                ["config" .= object
+                  ["duration" .= testDur
+                  ,"maxRps" .= maxRps
+                  ]
+                ]
+          WS.sendTextData conn conf -- share config
           ch   <- dupChan jobCh
           let loop = readChan ch >>= \case
                 -- FIXME: we can loop forever if EOF is lost, better check

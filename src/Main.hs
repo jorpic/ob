@@ -24,6 +24,8 @@ main = getArgs >>= \case
         <*> Config.require cfg "websocket.port"
         <*> Config.require cfg "graphite.port"
         <*> Config.require cfg "tank.data_dir"
+        <*> Config.require cfg "tank.max_rps"
+        <*> Config.require cfg "tank.duration"
     ss   <- emptyServerState
     void $ forkIO $ wsServer conf ss
     void $ forkIO $ graphiteServer conf ss
