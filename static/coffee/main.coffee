@@ -32,15 +32,26 @@ updateGraph = (d) ->
   do graph_redraw
 
 
+normalizeUrl = (url) ->
+  url = url.replace /\s/, ''
+  if not url.match /^https?:\/\//
+    url = 'http://' + url
+  u = document.createElement 'a'
+  u.href = url
+  u.protocol + '//' + u.host + (u.pathname || '/') + u.search
+
+
 orangeClick = (form) ->
-  # FIXME: check URL & normalize it
+  url = normalizeUrl form.elements[0].value
+  form.elements[0].value = url
+
   d3.select('#msg').text('Prepare for the worst...')
   spin = spinner
     width: 350
     height: 350
     container: '#spinner'
 
-  req = JSON.stringify(url: form.elements[0].value)
+  req = JSON.stringify(url: url)
   d3.json('/bang').post req, (err, rsp) ->
     if not rsp.error
       wsURL = "ws://#{location.hostname}:#{rsp.ws_port}/#{rsp.job}"
